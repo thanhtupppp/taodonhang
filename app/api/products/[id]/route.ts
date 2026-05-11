@@ -11,6 +11,15 @@ export async function POST(
   const method = String(formData.getAll("_method").at(-1) || "patch");
 
   if (method === "delete") {
+    const { error: itemsError } = await supabase
+      .from("order_items")
+      .delete()
+      .eq("product_id", id);
+
+    if (itemsError) {
+      return NextResponse.json({ error: itemsError.message }, { status: 400 });
+    }
+
     const { error } = await supabase.from("products").delete().eq("id", id);
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });

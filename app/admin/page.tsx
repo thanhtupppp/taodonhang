@@ -250,6 +250,13 @@ export default async function AdminPage() {
                     Cập nhật
                   </button>
                 </form>
+
+                <form action={`/api/orders/${order.id}`} method="post">
+                  <input type="hidden" name="_method" value="delete" />
+                  <button className="btn btn-secondary" type="submit">
+                    Xoá đơn hàng
+                  </button>
+                </form>
               </div>
             ))}
           </div>
