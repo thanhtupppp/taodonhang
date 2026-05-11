@@ -17,6 +17,15 @@ export async function POST(
     );
   }
 
+  const { error: itemsError } = await supabase
+    .from("order_items")
+    .delete()
+    .eq("order_id", id);
+
+  if (itemsError) {
+    return NextResponse.json({ error: itemsError.message }, { status: 400 });
+  }
+
   const { error } = await supabase.from("orders").delete().eq("id", id);
 
   if (error) {
