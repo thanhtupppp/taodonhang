@@ -79,7 +79,16 @@ export async function POST(request: NextRequest) {
         unit_price: Number(product.price),
       };
     })
-    .filter(Boolean);
+    .filter(
+      (
+        item,
+      ): item is {
+        order_id: any;
+        product_id: string;
+        quantity: number;
+        unit_price: number;
+      } => Boolean(item),
+    );
 
   const { error: itemsError } = await supabase
     .from("order_items")

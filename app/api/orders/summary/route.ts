@@ -16,7 +16,10 @@ export async function GET() {
 
   for (const order of orders || []) {
     for (const item of order.order_items || []) {
-      const productName = item.products?.name ?? "";
+      const product = Array.isArray(item.products)
+        ? item.products[0]
+        : item.products;
+      const productName = product?.name ?? "";
       const current = summary.get(item.product_id) ?? {
         product_name: productName,
         quantity: 0,

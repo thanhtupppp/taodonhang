@@ -24,7 +24,10 @@ export async function GET() {
 
   for (const order of orders || []) {
     for (const item of order.order_items || []) {
-      const productName = item.products?.name ?? "";
+      const product = Array.isArray(item.products)
+        ? item.products[0]
+        : item.products;
+      const productName = product?.name ?? "";
       const current = summary.get(item.product_id) ?? {
         product_name: productName,
         quantity: 0,
@@ -34,9 +37,11 @@ export async function GET() {
     }
   }
 
-  const rows = [["product_id", "product_name", "quantity"]];
+  const rows: Array<[string, string, string]> = [
+    ["product_id", "product_name", "quantity"],
+  ];
   for (const [product_id, value] of summary.entries()) {
-    rows.push([product_id, value.product_name, value.quantity]);
+    rows.push([product_id, value.product_name, String(value.quantity)]);
   }
 
   const csv = rows.map((row) => row.map(escapeCsv).join(",")).join("\n");

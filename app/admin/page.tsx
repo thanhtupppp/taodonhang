@@ -24,7 +24,10 @@ async function getProductSummary() {
 
   for (const order of data || []) {
     for (const item of order.order_items || []) {
-      const productName = item.products?.name ?? "";
+      const product = Array.isArray(item.products)
+        ? item.products[0]
+        : item.products;
+      const productName = product?.name ?? "";
       const current = summary.get(item.product_id) ?? {
         product_name: productName,
         quantity: 0,
