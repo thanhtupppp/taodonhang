@@ -8,7 +8,7 @@ export async function POST(
   const { id } = await params;
   const supabase = createSupabaseServiceClient();
   const formData = await request.formData();
-  const method = String(formData.get("_method") || "patch");
+  const method = String(formData.getAll("_method").at(-1) || "patch");
 
   if (method === "delete") {
     const { error } = await supabase.from("products").delete().eq("id", id);
